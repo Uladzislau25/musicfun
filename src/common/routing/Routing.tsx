@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router"
-import { MainPage } from "@/app/MainPage/MainPage.tsx"
+import { MainPage } from "@/app/ui/MainPage/MainPage.tsx"
 import { PlaylistsPage } from "@/features/playlists/ui/PlaylistsPage/PlaylistsPage.tsx"
 import { TracksPage } from "@/features/tracks/ui/TracksPage/TracksPage.tsx"
 import { ProfilePage } from "@/features/auth/ui/ProfilePage/ProfilePage"
-import { PageNotFound } from "../components/PageNotFound/PageNotFound"
+import { PageNotFound } from "@/common/components"
 
 export const Path = {
   Main: "/",

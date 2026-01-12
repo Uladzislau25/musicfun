@@ -1,6 +1,6 @@
 import { NavLink } from "react-router"
-import { Path } from "@/common/routing/Routing"
 import s from "./Header.module.css"
+import { Path } from "@/common/routing"
 
 const navItems = [
   { to: Path.Main, label: "Main" },
