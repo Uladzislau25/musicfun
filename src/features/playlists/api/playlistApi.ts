@@ -1,5 +1,5 @@
-//https://musicfun.it-incubator.app/api/1.0
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import type { FetchPlaylistsArgs, PlaylistsResponse } from "@/features/playlists/api/playlistsApi.types.ts"
 
 export const playlistApi = createApi({
   reducerPath: "playlistApi",
@@ -10,7 +10,7 @@ export const playlistApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    fetchPlaylists: build.query<any, void>({
+    fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
       query: () => "playlists",
     }),
   }),
