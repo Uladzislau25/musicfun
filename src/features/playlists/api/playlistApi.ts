@@ -28,6 +28,12 @@ export const playlistApi = createApi({
         body,
       }),
     }),
+    deletePlaylist: build.mutation<void, string>({
+      query: (playlistId) => ({
+        url: `playlists/${playlistId}`,
+        method: "delete",
+      }),
+    }),
   }),
 })
 
