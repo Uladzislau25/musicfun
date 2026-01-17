@@ -43,7 +43,7 @@ export const playlistApi = baseApi.injectEndpoints({
         return {
           url: `playlists/${playlistId}/images/main`,
           method: "post",
-          body: {},
+          body: formData,
         }
       },
       invalidatesTags: ["Playlist"],
