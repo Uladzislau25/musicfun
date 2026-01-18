@@ -3,7 +3,7 @@ import s from "./PlaylistsPage.module.css"
 import { CreatePlaylistForm } from "@/features/playlists/ui/PlaylistsPage/CreatePlaylistForm/CreatePlaylistForm.tsx"
 import { useForm } from "react-hook-form"
 import type { PlaylistData, UpdatePlaylistArgs } from "@/features/playlists/api/playlistsApi.types.ts"
-import { useState } from "react"
+import { type ChangeEvent, useState } from "react"
 import { PlaylistItem } from "@/features/playlists/ui/PlaylistsPage/PlaylistItem/PlaylistItem.tsx"
 import { EditPlaylistForm } from "@/features/playlists/ui/PlaylistsPage/EditPlaylistForm/EditPlaylistForm.tsx"
 import { useDebounceValue } from "@/common/hooks"
@@ -12,9 +12,14 @@ import { Pagination } from "@/common/components"
 export const PlaylistsPage = () => {
   const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(4)
 
   const debounceSearch = useDebounceValue(search)
-  const { data, isLoading } = useFetchPlaylistsQuery({ search: debounceSearch, pageNumber: currentPage })
+  const { data, isLoading } = useFetchPlaylistsQuery({
+    search: debounceSearch,
+    pageNumber: currentPage,
+    pageSize: pageSize,
+  })
 
   const [playlistId, setPlaylistId] = useState<string | null>(null)
   const { register, handleSubmit, reset } = useForm<UpdatePlaylistArgs>()
@@ -39,12 +44,20 @@ export const PlaylistsPage = () => {
       setPlaylistId(null)
     }
   }
+  const changePageSizeHandler = (size: number) => {
+    setCurrentPage(1)
+    setPageSize(size)
+  }
+  const searchPlaylistHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.currentTarget.value)
+    setCurrentPage(1)
+  }
 
   return (
     <div className={s.container}>
       <h1>Playlists page</h1>
       <CreatePlaylistForm />
-      <input type="search" placeholder="Search playlist by title" onChange={(e) => setSearch(e.target.value)} />
+      <input type="search" placeholder="Search playlist by title" onChange={(e) => searchPlaylistHandler(e)} />
       <div className={s.items}>
         {!data?.data.length && !isLoading && <h2>Playlist not found</h2>}
         {data?.data.map((playlist) => {
@@ -70,7 +83,13 @@ export const PlaylistsPage = () => {
           )
         })}
       </div>
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pagesCount={data?.meta.pagesCount || 1} />
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pagesCount={data?.meta.pagesCount || 1}
+        pageSize={pageSize}
+        changePageSize={changePageSizeHandler}
+      />
     </div>
   )
 }
