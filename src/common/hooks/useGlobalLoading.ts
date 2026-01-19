@@ -3,6 +3,8 @@ import { useSelector } from "react-redux"
 import { playlistApi } from "@/features/playlists/api/playlistApi.ts"
 import { tracksApi } from "@/features/tracks/api/tracksApi.ts"
 
+const excludedEndpoints = [playlistApi.endpoints.fetchPlaylists.name, tracksApi.endpoints.fetchTracks.name]
+
 export const useGlobalLoading = () => {
   return useSelector((state: RootState) => {
     // Получаем все активные запросы из RTK Query API
@@ -12,11 +14,7 @@ export const useGlobalLoading = () => {
     // Проверяем, есть ли активные запросы (статус 'pending')
     const hasActiveQueries = queries.some((query) => {
       if (query?.status !== "pending") return
-      if (query.endpointName === playlistApi.endpoints.fetchPlaylists.name) {
-        const completedQueries = queries.filter((q) => q?.status === "fulfilled")
-        return completedQueries.length > 0
-      }
-      if (query.endpointName === tracksApi.endpoints.fetchTracks.name) {
+      if (excludedEndpoints.includes(query.endpointName)) {
         const completedQueries = queries.filter((q) => q?.status === "fulfilled")
         return completedQueries.length > 0
       }
