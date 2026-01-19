@@ -11,7 +11,10 @@ export const useGlobalLoading = () => {
     // Проверяем, есть ли активные запросы (статус 'pending')
     const hasActiveQueries = queries.some((query) => {
       if (query?.status !== "pending") return
-      return query.endpointName !== playlistApi.endpoints.fetchPlaylists.name
+      if (query.endpointName === playlistApi.endpoints.fetchPlaylists.name) {
+        const completedQueries = queries.filter((q) => q?.status === "fulfilled")
+        return completedQueries.length > 0
+      }
     })
     const hasActiveMutations = mutations.some((mutation) => mutation?.status === "pending")
 
