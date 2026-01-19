@@ -1,6 +1,7 @@
 import type { RootState } from "@/app/model/store.ts"
 import { useSelector } from "react-redux"
 import { playlistApi } from "@/features/playlists/api/playlistApi.ts"
+import { tracksApi } from "@/features/tracks/api/tracksApi.ts"
 
 export const useGlobalLoading = () => {
   return useSelector((state: RootState) => {
@@ -12,6 +13,10 @@ export const useGlobalLoading = () => {
     const hasActiveQueries = queries.some((query) => {
       if (query?.status !== "pending") return
       if (query.endpointName === playlistApi.endpoints.fetchPlaylists.name) {
+        const completedQueries = queries.filter((q) => q?.status === "fulfilled")
+        return completedQueries.length > 0
+      }
+      if (query.endpointName === tracksApi.endpoints.fetchTracks.name) {
         const completedQueries = queries.filter((q) => q?.status === "fulfilled")
         return completedQueries.length > 0
       }
