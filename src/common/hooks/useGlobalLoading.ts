@@ -1,5 +1,6 @@
 import type { RootState } from "@/app/model/store.ts"
 import { useSelector } from "react-redux"
+import { playlistApi } from "@/features/playlists/api/playlistApi.ts"
 
 export const useGlobalLoading = () => {
   return useSelector((state: RootState) => {
@@ -8,7 +9,10 @@ export const useGlobalLoading = () => {
     const mutations = Object.values(state.baseApi.mutations || {})
 
     // Проверяем, есть ли активные запросы (статус 'pending')
-    const hasActiveQueries = queries.some((query) => query?.status === "pending")
+    const hasActiveQueries = queries.some((query) => {
+      if (query?.status !== "pending") return
+      return query.endpointName !== playlistApi.endpoints.fetchPlaylists.name
+    })
     const hasActiveMutations = mutations.some((mutation) => mutation?.status === "pending")
 
     return hasActiveQueries || hasActiveMutations
