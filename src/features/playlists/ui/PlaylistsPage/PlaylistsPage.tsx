@@ -20,7 +20,11 @@ export const PlaylistsPage = () => {
     pageSize: pageSize,
   })
   if (error) {
-    toast(error?.data.error, { type: "error", theme: "colored" })
+    if ("status" in error) {
+      const errMsg = "error" in error ? error.error : JSON.stringify(error.data)
+      toast(errMsg, { type: "error", theme: "colored" })
+    }
+    //toast(error?.data.error, { type: "error", theme: "colored" })
   }
 
   const changePageSizeHandler = (size: number) => {
