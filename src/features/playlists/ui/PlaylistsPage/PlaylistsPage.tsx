@@ -23,7 +23,11 @@ export const PlaylistsPage = () => {
     if ("status" in error) {
       const errMsg = "error" in error ? error.error : JSON.stringify(error.data)
       toast(errMsg, { type: "error", theme: "colored" })
+    } else {
+      const errMsg = error.message || "Some error occurred"
+      toast(errMsg, { type: "error", theme: "colored" })
     }
+
     //toast(error?.data.error, { type: "error", theme: "colored" })
   }
 
