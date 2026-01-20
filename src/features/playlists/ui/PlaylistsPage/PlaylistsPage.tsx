@@ -6,6 +6,7 @@ import { type ChangeEvent, useState } from "react"
 import { useDebounceValue } from "@/common/hooks"
 import { Pagination } from "@/common/components"
 import { PlaylistList } from "@/features/playlists/ui/PlaylistsPage/PlaylistList/PlaylistList.tsx"
+import { toast } from "react-toastify"
 
 export const PlaylistsPage = () => {
   const [search, setSearch] = useState("")
@@ -13,11 +14,14 @@ export const PlaylistsPage = () => {
   const [pageSize, setPageSize] = useState(4)
 
   const debounceSearch = useDebounceValue(search)
-  const { data, isLoading } = useFetchPlaylistsQuery({
+  const { data, isLoading, error } = useFetchPlaylistsQuery({
     search: debounceSearch,
     pageNumber: currentPage,
     pageSize: pageSize,
   })
+  if (error) {
+    toast(error?.data.error, { type: "error", theme: "colored" })
+  }
 
   const changePageSizeHandler = (size: number) => {
     setCurrentPage(1)
