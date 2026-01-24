@@ -21,7 +21,12 @@ export const PlaylistsPage = () => {
   })
   if (error) {
     if ("status" in error) {
-      const errMsg = "error" in error ? error.error : (error.data as { error: string }).error
+      const errMsg =
+        "error" in error
+          ? error.error
+          : (error.data as { error: string }).error ||
+            (error.data as { message: string }).message ||
+            "Some error occurred"
       toast(errMsg, { type: "error", theme: "colored" })
     } else {
       const errMsg = error.message || "Some error occurred"
