@@ -22,6 +22,7 @@ export const PlaylistsPage = () => {
   useEffect(() => {
     if (error) {
       if ("status" in error) {
+        // FetchBaseQueryError
         const errMsg =
           "error" in error
             ? error.error
@@ -30,11 +31,10 @@ export const PlaylistsPage = () => {
               "Some error occurred"
         toast(errMsg, { type: "error", theme: "colored" })
       } else {
+        //SerializedError
         const errMsg = error.message || "Some error occurred"
         toast(errMsg, { type: "error", theme: "colored" })
       }
-
-      //toast(error?.data.error, { type: "error", theme: "colored" })
     }
   }, [error])
 
