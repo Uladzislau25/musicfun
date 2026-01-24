@@ -2,7 +2,7 @@ import { useFetchPlaylistsQuery } from "@/features/playlists/api/playlistApi.ts"
 import s from "./PlaylistsPage.module.css"
 import { CreatePlaylistForm } from "@/features/playlists/ui/PlaylistsPage/CreatePlaylistForm/CreatePlaylistForm.tsx"
 
-import { type ChangeEvent, useState } from "react"
+import { type ChangeEvent, useEffect, useState } from "react"
 import { useDebounceValue } from "@/common/hooks"
 import { Pagination } from "@/common/components"
 import { PlaylistList } from "@/features/playlists/ui/PlaylistsPage/PlaylistList/PlaylistList.tsx"
@@ -19,22 +19,24 @@ export const PlaylistsPage = () => {
     pageNumber: currentPage,
     pageSize: pageSize,
   })
-  if (error) {
-    if ("status" in error) {
-      const errMsg =
-        "error" in error
-          ? error.error
-          : (error.data as { error: string }).error ||
-            (error.data as { message: string }).message ||
-            "Some error occurred"
-      toast(errMsg, { type: "error", theme: "colored" })
-    } else {
-      const errMsg = error.message || "Some error occurred"
-      toast(errMsg, { type: "error", theme: "colored" })
-    }
+  useEffect(() => {
+    if (error) {
+      if ("status" in error) {
+        const errMsg =
+          "error" in error
+            ? error.error
+            : (error.data as { error: string }).error ||
+              (error.data as { message: string }).message ||
+              "Some error occurred"
+        toast(errMsg, { type: "error", theme: "colored" })
+      } else {
+        const errMsg = error.message || "Some error occurred"
+        toast(errMsg, { type: "error", theme: "colored" })
+      }
 
-    //toast(error?.data.error, { type: "error", theme: "colored" })
-  }
+      //toast(error?.data.error, { type: "error", theme: "colored" })
+    }
+  }, [error])
 
   const changePageSizeHandler = (size: number) => {
     setCurrentPage(1)
