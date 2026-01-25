@@ -21,8 +21,11 @@ export const baseApi = createApi({
 
     if (result.error) {
       switch (result.error.status) {
+        case "FETCH_ERROR":
+        case "PARSING_ERROR":
+        case "CUSTOM_ERROR":
         case "TIMEOUT_ERROR":
-          toast(result.error.error)
+          toast(result.error.error, { type: "error", theme: "colored" })
           break
         case 404:
           //toast((result.error.data as { error: string }).error, { type: "error", theme: "colored" })
@@ -32,6 +35,7 @@ export const baseApi = createApi({
             toast(JSON.stringify(result.error.data), { type: "error", theme: "colored" })
           }
           break
+        case 401:
         case 429:
           //toast((result.error.data as { message: string }).message, { type: "error", theme: "colored" })
           if (isErrorWithProperty(result.error.data, "message")) {
