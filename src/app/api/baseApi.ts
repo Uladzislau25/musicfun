@@ -54,7 +54,11 @@ export const baseApi = createApi({
           break
 
         default:
-          toast("Some error occurred", { type: "error", theme: "colored" })
+          if (result.error.status >= 500 && result.error.status < 600) {
+            toast("Server error occured, Please try again later.", { type: "error", theme: "colored" })
+          } else {
+            toast("Some error occurred", { type: "error", theme: "colored" })
+          }
       }
     }
 
