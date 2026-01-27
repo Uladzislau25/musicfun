@@ -40,6 +40,29 @@ export const playlistApi = baseApi.injectEndpoints({
         method: "put",
         body,
       }),
+      onQueryStarted: async ({ playlistId, body }, { queryFulfilled, dispatch }) => {
+        const patchCollection = dispatch(
+          playlistApi.util.updateQueryData(
+            "fetchPlaylists",
+            {
+              pageNumber: 1,
+              pageSize: 2,
+              search: "",
+            },
+            (state) => {
+              const index = state.data.findIndex((playlist) => playlist.id === playlistId)
+              if (index !== -1) {
+                state.data[index].attributes = { ...state.data[index].attributes, ...body }
+              }
+            },
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchCollection.undo()
+        }
+      },
       invalidatesTags: ["Playlist"],
     }),
     uploadPlaylistCover: build.mutation<Images, { playlistId: string; file: File }>({
