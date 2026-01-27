@@ -40,27 +40,36 @@ export const playlistApi = baseApi.injectEndpoints({
         method: "put",
         body,
       }),
-      onQueryStarted: async ({ playlistId, body }, { queryFulfilled, dispatch }) => {
-        const patchCollection = dispatch(
-          playlistApi.util.updateQueryData(
-            "fetchPlaylists",
-            {
-              pageNumber: 1,
-              pageSize: 2,
-              search: "",
-            },
-            (state) => {
-              const index = state.data.findIndex((playlist) => playlist.id === playlistId)
-              if (index !== -1) {
-                state.data[index].attributes = { ...state.data[index].attributes, ...body }
-              }
-            },
-          ),
-        )
+      onQueryStarted: async ({ playlistId, body }, { queryFulfilled, dispatch, getState }) => {
+        const args = playlistApi.util.selectCachedArgsForQuery(getState(), "fetchPlaylists")
+        const patchCollections: any[] = []
+        args.forEach((arg) => {
+          patchCollections.push(
+            dispatch(
+              playlistApi.util.updateQueryData(
+                "fetchPlaylists",
+                {
+                  pageNumber: arg.pageNumber,
+                  pageSize: arg.pageSize,
+                  search: arg.search,
+                },
+                (state) => {
+                  const index = state.data.findIndex((playlist) => playlist.id === playlistId)
+                  if (index !== -1) {
+                    state.data[index].attributes = { ...state.data[index].attributes, ...body }
+                  }
+                },
+              ),
+            ),
+          )
+        })
+
         try {
           await queryFulfilled
         } catch {
-          patchCollection.undo()
+          patchCollections.forEach((patchCollection) => {
+            patchCollection.undo()
+          })
         }
       },
       invalidatesTags: ["Playlist"],
