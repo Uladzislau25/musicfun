@@ -6,6 +6,7 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getMe: build.query<MeResponse, void>({
       query: () => `auth/me`,
+      providesTags: ["Auth"],
     }),
     login: build.mutation<LoginResponse, LoginArgs>({
       query: (payload) => {
@@ -19,6 +20,7 @@ export const authApi = baseApi.injectEndpoints({
         const { data } = await queryFulfilled
         localStorage.setItem(AUTH_KEYS.accessToken, data.accessToken)
         localStorage.setItem(AUTH_KEYS.refreshToken, data.refreshToken)
+        dispatch(authApi.util.invalidateTags(["Auth"]))
       },
     }),
   }),

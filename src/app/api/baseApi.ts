@@ -4,7 +4,7 @@ import { AUTH_KEYS } from "@/common/constants"
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  tagTypes: ["Playlist"],
+  tagTypes: ["Playlist", "Auth"],
   baseQuery: async (args, api, extraOptions) => {
     const result = await fetchBaseQuery({
       baseUrl: import.meta.env.VITE_BASE_URL,
