@@ -8,8 +8,8 @@ export const Login = () => {
     // Создаем URI для перенаправления после авторизации
     const redirectUri = import.meta.env.VITE_DOMAIN_ADDRESS + Path.OAuthRedirect
 
-    //Создаем URL endpoint OAuth авторизации, добавляя callbackUrl как параметр запроса
-    const url = `${import.meta.env.VITE_BASE_URL}/auth/oauth-redirect?callbackURL=${redirectUri}`
+    // Создаем URL endpoint OAuth авторизации, добавляя callbackUrl как параметр запроса
+    const url = `${import.meta.env.VITE_BASE_URL}/auth/oauth-redirect?callbackUrl=${redirectUri}`
 
     // Открываем всплывающее окно для OAuth авторизации
     window.open(url, "oauthPopup", "width=500, height=600")
@@ -19,7 +19,6 @@ export const Login = () => {
       if (event.origin !== import.meta.env.VITE_DOMAIN_ADDRESS) return
 
       const { code } = event.data
-
       if (!code) return
 
       // Отписываемся от события, чтобы избежать обработки дублирующихся сообщений
@@ -30,9 +29,10 @@ export const Login = () => {
     // Подписываемся на сообщения из всплывающего окна
     window.addEventListener("message", receiveMessage)
   }
+
   return (
     <button type={"button"} onClick={loginHandler}>
-      Login
+      login
     </button>
   )
 }
