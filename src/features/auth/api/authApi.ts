@@ -32,10 +32,11 @@ export const authApi = baseApi.injectEndpoints({
           body: { refreshToken },
         }
       },
-      onQueryStarted: async (_args, { queryFulfilled }) => {
+      onQueryStarted: async (_args, { dispatch, queryFulfilled }) => {
         await queryFulfilled
         localStorage.removeItem(AUTH_KEYS.accessToken)
         localStorage.removeItem(AUTH_KEYS.refreshToken)
+        dispatch(baseApi.util.resetApiState())
       },
     }),
   }),
