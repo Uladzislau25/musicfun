@@ -17,7 +17,6 @@ export const handleErrors = (error: FetchBaseQueryError) => {
           errorToast(JSON.stringify(error.data))
         }
         break
-      case 401:
       case 429:
         if (isErrorWithProperty(error.data, "message")) {
           errorToast(error.data.message)
@@ -26,6 +25,14 @@ export const handleErrors = (error: FetchBaseQueryError) => {
         }
         break
       case 400:
+        if (isErrorWithDetailArray(error.data)) {
+          const errorMessage = error.data.errors[0].detail
+          if (errorMessage.includes("refresh")) return
+          errorToast(trimToMaxLength(error.data.errors[0].detail))
+        } else {
+          errorToast(JSON.stringify(error.data))
+        }
+        break
       case 403:
         if (isErrorWithDetailArray(error.data)) {
           errorToast(trimToMaxLength(error.data.errors[0].detail))
