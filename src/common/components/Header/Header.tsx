@@ -1,4 +1,4 @@
-import { NavLink } from "react-router"
+import { Link, NavLink } from "react-router"
 import s from "./Header.module.css"
 import { Path } from "@/common/routing"
 import { useGetMeQuery, useLogoutMutation } from "@/features/auth/api/authApi.ts"
@@ -34,7 +34,9 @@ export const Header = () => {
       </nav>
       {data && (
         <div className={s.loginContainer}>
-          <p>{data.login}</p>
+          <Link to={Path.Profile}>
+            <p>{data.login}</p>
+          </Link>
           <button onClick={logoutHandler}>Logout</button>
         </div>
       )}
