@@ -3,6 +3,8 @@ import { useFetchPlaylistsQuery } from "@/features/playlists/api/playlistApi.ts"
 import { PlaylistList } from "@/features/playlists/ui/PlaylistsPage/PlaylistList/PlaylistList.tsx"
 import { CreatePlaylistForm } from "@/features/playlists/ui/PlaylistsPage/CreatePlaylistForm/CreatePlaylistForm.tsx"
 import s from "./ProfilePage.module.css"
+import { Navigate } from "react-router"
+import { Path } from "@/common/routing"
 
 export const ProfilePage = () => {
   const { data: meResponse, isLoading: isMeLoading } = useGetMeQuery()
@@ -12,6 +14,7 @@ export const ProfilePage = () => {
     { skip: !meResponse?.userId },
   )
   if (isLoading || isMeLoading) return <h1>Seleton loader ...</h1>
+  if (!isMeLoading && !meResponse) return <Navigate to={Path.Playlists} />
 
   return (
     <div>
