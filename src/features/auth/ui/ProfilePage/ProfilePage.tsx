@@ -5,16 +5,20 @@ import { CreatePlaylistForm } from "@/features/playlists/ui/PlaylistsPage/Create
 import s from "./ProfilePage.module.css"
 
 export const ProfilePage = () => {
-  const { data: meResponse } = useGetMeQuery()
-  const { data: playlistsResponse, isLoading } = useFetchPlaylistsQuery({
-    userId: meResponse?.userId,
-  })
+  const { data: meResponse, isLoading: isMeLoading } = useGetMeQuery()
+
+  const { data: playlistsResponse, isLoading } = useFetchPlaylistsQuery(
+    { userId: meResponse?.userId },
+    { skip: !meResponse?.userId },
+  )
+  if (isLoading || isMeLoading) return <h1>Seleton loader ...</h1>
+
   return (
     <div>
       <h1>{meResponse?.login} page</h1>
       <div className={s.container}>
         <CreatePlaylistForm />
-        <PlaylistList isPlaylistLoading={isLoading} playlists={playlistsResponse?.data || []} />
+        <PlaylistList isPlaylistLoading={isLoading || isMeLoading} playlists={playlistsResponse?.data || []} />
       </div>
     </div>
   )

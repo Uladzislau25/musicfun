@@ -13,7 +13,7 @@ export const authApi = baseApi.injectEndpoints({
         return {
           method: "POST",
           url: "/auth/login",
-          body: { ...payload, accessTokenTTL: "3m" },
+          body: { ...payload, accessTokenTTL: "30m" },
         }
       },
       onQueryStarted: async (_args, { dispatch, queryFulfilled }) => {
