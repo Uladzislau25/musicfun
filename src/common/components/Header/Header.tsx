@@ -8,7 +8,6 @@ const navItems = [
   { to: Path.Main, label: "Main" },
   { to: Path.Playlists, label: "Playlists" },
   { to: Path.Tracks, label: "Tracks" },
-  { to: Path.Profile, label: "Profile" },
 ]
 
 export const Header = () => {
@@ -34,9 +33,7 @@ export const Header = () => {
       </nav>
       {data && (
         <div className={s.loginContainer}>
-          <Link to={Path.Profile}>
-            <p>{data.login}</p>
-          </Link>
+          <Link to={Path.Profile}>{data.login} </Link>
           <button onClick={logoutHandler}>Logout</button>
         </div>
       )}
