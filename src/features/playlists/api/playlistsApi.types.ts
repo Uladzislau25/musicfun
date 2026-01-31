@@ -26,7 +26,7 @@ export type FetchPlaylistsArgs = {
 }
 export type CreatePlaylistArgs = {
   title: string
-  description: string
+  description: string | null
 }
 export type UpdatePlaylistArgs = {
   title: string
