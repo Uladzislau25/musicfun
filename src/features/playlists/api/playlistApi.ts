@@ -20,11 +20,18 @@ export const playlistApi = baseApi.injectEndpoints({
       providesTags: ["Playlist"],
     }),
     createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
-      query: (body) => ({
-        url: "playlists",
-        method: "post",
-        body,
-      }),
+      query: (body) => {
+        return {
+          url: "playlists",
+          method: "post",
+          body: {
+            data: {
+              type: "playlists",
+              attributes: body,
+            },
+          },
+        }
+      },
       invalidatesTags: ["Playlist"],
     }),
     deletePlaylist: build.mutation<void, string>({
@@ -38,7 +45,16 @@ export const playlistApi = baseApi.injectEndpoints({
       query: ({ playlistId, body }) => ({
         url: `playlists/${playlistId}`,
         method: "put",
-        body,
+        body: {
+          data: {
+            type: "playlists",
+            attributes: {
+              title: body.title,
+              description: body.description,
+              tagIds: body.tagIds,
+            },
+          },
+        },
       }),
       onQueryStarted: async ({ playlistId, body }, { queryFulfilled, dispatch, getState }) => {
         const args = playlistApi.util.selectCachedArgsForQuery(getState(), "fetchPlaylists")
@@ -46,20 +62,17 @@ export const playlistApi = baseApi.injectEndpoints({
         args.forEach((arg) => {
           patchCollections.push(
             dispatch(
-              playlistApi.util.updateQueryData(
-                "fetchPlaylists",
-                {
-                  pageNumber: arg.pageNumber,
-                  pageSize: arg.pageSize,
-                  search: arg.search,
-                },
-                (state) => {
-                  const index = state.data.findIndex((playlist) => playlist.id === playlistId)
-                  if (index !== -1) {
-                    state.data[index].attributes = { ...state.data[index].attributes, ...body }
+              playlistApi.util.updateQueryData("fetchPlaylists", arg, (state) => {
+                const index = state.data.findIndex((playlist) => playlist.id === playlistId)
+                if (index !== -1) {
+                  state.data[index].attributes = {
+                    ...state.data[index].attributes,
+                    title: body.title,
+                    description: body.description,
+                    updatedAt: new Date().toISOString(),
                   }
-                },
-              ),
+                }
+              }),
             ),
           )
         })
@@ -72,7 +85,6 @@ export const playlistApi = baseApi.injectEndpoints({
           })
         }
       },
-      invalidatesTags: ["Playlist"],
     }),
     uploadPlaylistCover: build.mutation<Images, { playlistId: string; file: File }>({
       query: ({ playlistId, file }) => {

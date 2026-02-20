@@ -22,7 +22,7 @@ export const PlaylistList = ({ playlists, isPlaylistLoading }: Props) => {
       deletePlaylist(playlistId)
     }
   }
-
+  console.log(playlists)
   const editPlaylistHandler = (playlist: PlaylistData | null) => {
     if (playlist) {
       setPlaylistId(playlist.id)

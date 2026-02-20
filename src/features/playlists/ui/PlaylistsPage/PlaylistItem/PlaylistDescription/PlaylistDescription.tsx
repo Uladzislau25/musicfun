@@ -5,6 +5,7 @@ type Props = {
 }
 
 export const PlaylistDescription = ({ attributes }: Props) => {
+  console.log(attributes)
   return (
     <>
       <div>title: {attributes.title}</div>

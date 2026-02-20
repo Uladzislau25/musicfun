@@ -24,8 +24,9 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
           extraOption,
         )
         if (refreshResult.data && isTokens(refreshResult.data)) {
-          localStorage.setItem(AUTH_KEYS.refreshToken, refreshResult.data.refreshToken)
           localStorage.setItem(AUTH_KEYS.accessToken, refreshResult.data.accessToken)
+          localStorage.setItem(AUTH_KEYS.refreshToken, refreshResult.data.refreshToken)
+
           result = await baseQuery(args, api, extraOption)
         } else {
           //@ts-expect-error RTK Query typing issue

@@ -26,6 +26,7 @@ export default defineConfig(
       globals: globals.browser,
     },
     rules: {
+      "no-debugger": "off",
       "unused-imports/no-unused-imports": "error",
       "@typescript-eslint/no-unused-imports": "off",
       "unused-imports/no-unused-vars": [
