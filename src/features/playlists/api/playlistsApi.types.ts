@@ -1,5 +1,7 @@
 import type { CurrentUserReaction } from "@/common/enums"
 import type { Images, Tag, User } from "@/common/types"
+import type { createPlaylistSchema } from "@/features/playlists/model/playlists.schemas.ts"
+import z from "zod"
 
 export type PlaylistsResponse = {
   data: PlaylistData[]
@@ -44,10 +46,7 @@ export type FetchPlaylistsArgs = {
   userId?: string
   trackId?: string
 }
-export type CreatePlaylistArgs = {
-  title: string
-  description: string
-}
+export type CreatePlaylistArgs = z.infer<typeof createPlaylistSchema>
 export type UpdatePlaylistArgs = {
   title: string
   description: string
