@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from "zod"
 import {
   coverSchema,
   currentUserReactionSchema,
@@ -7,8 +7,7 @@ import {
   userSchema,
 } from "@/common/schemas/schemas.ts"
 
-
-export type Tag  = z.infer<typeof tagSchema>
+export type Tag = z.infer<typeof tagSchema>
 
 export type User = z.infer<typeof userSchema>
 
