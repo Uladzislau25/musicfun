@@ -13,7 +13,7 @@ export const playlistMetaSchema = z.object({
   page: z.int().positive(),
   pageSize: z.int().positive(),
   totalCount: z.int().positive(),
-  pageCount: z.int().positive(),
+  pagesCount: z.int().positive(),
 })
 
 export const playlistAttributesSchema = z.object({

@@ -2,20 +2,21 @@ import type {
   CreatePlaylistArgs,
   FetchPlaylistsArgs,
   PlaylistData,
-  PlaylistsResponse,
   UpdatePlaylistArgs,
 } from "@/features/playlists/api/playlistsApi.types.ts"
 import { baseApi } from "@/app/api/baseApi.ts"
 import type { Images } from "@/common/types"
+import { playlistResponseSchema } from "@/features/playlists/model/playlists.schemas.ts"
+import { errorToast } from "@/common/utils"
 
 export const playlistApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
-      query: (params) => {
-        return {
-          url: "playlists",
-          params,
-        }
+    fetchPlaylists: build.query({
+      query: (params: FetchPlaylistsArgs) => ({ url: "playlists", params }),
+      responseSchema: playlistResponseSchema,
+      catchSchemaFailure: (err) => {
+        errorToast("Zod error. Details in the console", err.issues)
+        return { status: "CUSTOM_ERROR", error: "Schema validation failed" }
       },
       providesTags: ["Playlist"],
     }),
