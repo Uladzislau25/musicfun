@@ -40,3 +40,6 @@ export const playlistResponseSchema = z.object({
   data: z.array(playlistDataSchema),
   meta: playlistMetaSchema,
 })
+export const playlistCreateResponseSchema = z.object({
+  data: playlistDataSchema,
+})

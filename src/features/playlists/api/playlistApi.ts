@@ -6,7 +6,7 @@ import type {
 } from "@/features/playlists/api/playlistsApi.types.ts"
 import { baseApi } from "@/app/api/baseApi.ts"
 import type { Images } from "@/common/types"
-import { playlistResponseSchema } from "@/features/playlists/model/playlists.schemas.ts"
+import { playlistCreateResponseSchema, playlistResponseSchema } from "@/features/playlists/model/playlists.schemas.ts"
 import { errorToast } from "@/common/utils"
 
 export const playlistApi = baseApi.injectEndpoints({
@@ -21,17 +21,20 @@ export const playlistApi = baseApi.injectEndpoints({
       providesTags: ["Playlist"],
     }),
     createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
-      query: (body) => {
-        return {
-          url: "playlists",
-          method: "post",
-          body: {
-            data: {
-              type: "playlists",
-              attributes: body,
-            },
+      query: (body) => ({
+        url: "playlists",
+        method: "post",
+        body: {
+          data: {
+            type: "playlists",
+            attributes: body,
           },
-        }
+        },
+      }),
+      responseSchema: playlistCreateResponseSchema,
+      catchSchemaFailure: (err) => {
+        errorToast("Zod error, Details in the console", err.issues)
+        return { status: "CUSTOM_ERROR", error: "Schema validation failed" }
       },
       invalidatesTags: ["Playlist"],
     }),
