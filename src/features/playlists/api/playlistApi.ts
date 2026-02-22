@@ -8,6 +8,7 @@ import { baseApi } from "@/app/api/baseApi.ts"
 import type { Images } from "@/common/types"
 import { playlistCreateResponseSchema, playlistResponseSchema } from "@/features/playlists/model/playlists.schemas.ts"
 import { errorToast } from "@/common/utils"
+import { imagesSchema } from "@/common/schemas/schemas.ts"
 
 export const playlistApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -98,6 +99,11 @@ export const playlistApi = baseApi.injectEndpoints({
           method: "post",
           body: formData,
         }
+      },
+      responseSchema: imagesSchema,
+      catchSchemaFailure: (err) => {
+        errorToast("Zod error. Detail in the console", err.issues)
+        return { status: "CUSTOM_ERROR", error: "Schema validation failed" }
       },
       invalidatesTags: ["Playlist"],
     }),
