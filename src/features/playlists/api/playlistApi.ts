@@ -69,7 +69,6 @@ export const playlistApi = baseApi.injectEndpoints({
                   state.data[index].attributes = {
                     ...state.data[index].attributes,
                     title: body.title,
-                    description: body.description,
                     updatedAt: new Date().toISOString(),
                   }
                 }
