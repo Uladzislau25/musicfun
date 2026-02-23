@@ -9,16 +9,13 @@ import type { Images } from "@/common/types"
 import { playlistCreateResponseSchema, playlistResponseSchema } from "@/features/playlists/model/playlists.schemas.ts"
 import { errorToast } from "@/common/utils"
 import { imagesSchema } from "@/common/schemas/schemas.ts"
+import { withZodCath } from "@/common/utils/withZodCath.ts"
 
 export const playlistApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchPlaylists: build.query({
       query: (params: FetchPlaylistsArgs) => ({ url: "playlists", params }),
-      responseSchema: playlistResponseSchema,
-      catchSchemaFailure: (err) => {
-        errorToast("Zod error. Details in the console", err.issues)
-        return { status: "CUSTOM_ERROR", error: "Schema validation failed" }
-      },
+      ...withZodCath(playlistResponseSchema),
       providesTags: ["Playlist"],
     }),
     createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
