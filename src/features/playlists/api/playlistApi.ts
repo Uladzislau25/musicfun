@@ -7,7 +7,6 @@ import type {
 import { baseApi } from "@/app/api/baseApi.ts"
 import type { Images } from "@/common/types"
 import { playlistCreateResponseSchema, playlistResponseSchema } from "@/features/playlists/model/playlists.schemas.ts"
-import { errorToast } from "@/common/utils"
 import { imagesSchema } from "@/common/schemas/schemas.ts"
 import { withZodCath } from "@/common/utils/withZodCath.ts"
 
@@ -29,11 +28,7 @@ export const playlistApi = baseApi.injectEndpoints({
           },
         },
       }),
-      responseSchema: playlistCreateResponseSchema,
-      catchSchemaFailure: (err) => {
-        errorToast("Zod error, Details in the console", err.issues)
-        return { status: "CUSTOM_ERROR", error: "Schema validation failed" }
-      },
+      ...withZodCath(playlistCreateResponseSchema),
       invalidatesTags: ["Playlist"],
     }),
     deletePlaylist: build.mutation<void, string>({
@@ -97,11 +92,7 @@ export const playlistApi = baseApi.injectEndpoints({
           body: formData,
         }
       },
-      responseSchema: imagesSchema,
-      catchSchemaFailure: (err) => {
-        errorToast("Zod error. Detail in the console", err.issues)
-        return { status: "CUSTOM_ERROR", error: "Schema validation failed" }
-      },
+      ...withZodCath(imagesSchema),
       invalidatesTags: ["Playlist"],
     }),
     deletePlaylistCover: build.mutation<void, { playlistId: string }>({
