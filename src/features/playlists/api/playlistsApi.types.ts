@@ -3,7 +3,7 @@ import {
   playlistAttributesSchema,
   playlistDataSchema,
   playlistMetaSchema,
-  playlistResponseSchema
+  playlistResponseSchema,
 } from "@/features/playlists/model/playlists.schemas.ts"
 import z from "zod"
 
@@ -31,4 +31,11 @@ export type UpdatePlaylistArgs = {
   title: string
   description: string
   tagIds: string[]
+}
+
+export type PlaylistCreatedEvent = {
+  type: "tracks.playlist-created"
+  payload: {
+    data: PlaylistData
+  }
 }
