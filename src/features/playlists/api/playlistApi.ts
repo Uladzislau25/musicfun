@@ -23,20 +23,15 @@ export const playlistApi = baseApi.injectEndpoints({
         // Ждем разрешения начального запроса перед продолжением
         await cacheDataLoaded
 
-
-
-        const unsubscribe = subscribeToEvent<PlaylistCreatedEvent>(
-          SOCKET_EVENTS.PLAYLIST_CREATED,
-          msg => {
-            const newPlaylist = msg.payload.data
-            updateCachedData(state => {
-              state.data.pop()
-              state.data.unshift(newPlaylist)
-              state.meta.totalCount = state.meta.totalCount + 1
-              state.meta.pagesCount = Math.ceil(state.meta.pagesCount / state.meta.pageSize)
-            })
-          }
-        )
+        const unsubscribe = subscribeToEvent<PlaylistCreatedEvent>(SOCKET_EVENTS.PLAYLIST_CREATED, (msg) => {
+          const newPlaylist = msg.payload.data
+          updateCachedData((state) => {
+            state.data.pop()
+            state.data.unshift(newPlaylist)
+            state.meta.totalCount = state.meta.totalCount + 1
+            state.meta.pagesCount = Math.ceil(state.meta.pagesCount / state.meta.pageSize)
+          })
+        })
 
         // CacheEntryRemoved разрешится, когда подписка на кеш больше не активна
         await cacheEntryRemoved
