@@ -24,7 +24,8 @@ export const playlistApi = baseApi.injectEndpoints({
         // Ждем разрешения начального запроса перед продолжением
         await cacheDataLoaded
 
-        const unsubscribe = subscribeToEvent<PlaylistCreatedEvent>(SOCKET_EVENTS.PLAYLIST_CREATED, (msg) => {
+        const unsubscribes = [
+          subscribeToEvent<PlaylistCreatedEvent>(SOCKET_EVENTS.PLAYLIST_CREATED, (msg) => {
           const newPlaylist = msg.payload.data
           updateCachedData((state) => {
             state.data.pop()
@@ -32,9 +33,8 @@ export const playlistApi = baseApi.injectEndpoints({
             state.meta.totalCount = state.meta.totalCount + 1
             state.meta.pagesCount = Math.ceil(state.meta.pagesCount / state.meta.pageSize)
           })
-        })
-
-        const unsubscribe2 = subscribeToEvent<PlaylistUpdatedEvent>(SOCKET_EVENTS.PLAYLIST_UPDATED, (msg) => {
+        }),
+        subscribeToEvent<PlaylistUpdatedEvent>(SOCKET_EVENTS.PLAYLIST_UPDATED, (msg) => {
           const newPlaylist = msg.payload.data
           updateCachedData((state) => {
             const index = state.data.findIndex((playlist) => playlist.id === newPlaylist.id)
@@ -43,11 +43,10 @@ export const playlistApi = baseApi.injectEndpoints({
             }
           })
         })
-
+      ]
         // CacheEntryRemoved разрешится, когда подписка на кеш больше не активна
         await cacheEntryRemoved
-        unsubscribe()
-        unsubscribe2()
+        unsubscribes.forEach((unsubscribe) => unsubscribe())
       },
       providesTags: ["Playlist"],
     }),
