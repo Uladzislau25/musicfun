@@ -1,4 +1,8 @@
 .layout {
-  max-width: 1186px;
-  margin: 0 auto 200px;
+    background: linear-gradient(to bottom, #6a0dad 0%, #2a0845 50%, #111111 100%);
+    padding: 0 110px;
+}
+
+.wrapper {
+    background: #111111;
 }

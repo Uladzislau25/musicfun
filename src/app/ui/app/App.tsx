@@ -7,13 +7,13 @@ import { useGlobalLoading } from "@/common/hooks/useGlobalLoading.ts"
 export const App = () => {
   const isGlobalLoading = useGlobalLoading()
   return (
-    <>
+    <div className={s.wrapper}>
       <Header />
       {isGlobalLoading && <LinearProgress />}
       <div className={s.layout}>
         <Routing />
       </div>
       <ToastContainer />
-    </>
+    </div>
   )
 }
