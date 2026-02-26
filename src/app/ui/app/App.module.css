@@ -1,6 +1,7 @@
 .layout {
     background: linear-gradient(to bottom, #6a0dad 0%, #2a0845 50%, #111111 100%);
-    padding: 0 110px;
+    padding: 0 100px;
+    height: 100vh;
 }
 
 .wrapper {
